@@ -5,15 +5,39 @@ import PostsList from "./components/PostsList";
 import NewPost from "./components/NewPost";
 import { useEffect, useState } from "react";
 import NavScrollExample from "./components/NavScrollExample";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 
 function App() {
   const [enteredBody, setEnteredBody] = useState("");
   const [enteredAuthor, setEnteredAuthor] = useState("");
-  const [ posts, setPosts ] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    async function fetchPosts(){
-      const response = await fetch ('http://localhost:8080/posts')
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleLogin = (token) => {
+    localStorage.setItem("token", token);
+    setIsAuthenticated(true);
+    navigate("/");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token'); 
+    setIsAuthenticated(false);         
+    navigate('/login');             
+  };
+
+  useEffect(() => {
+    async function fetchPosts() {
+      const response = await fetch("http://localhost:8080/posts");
       const resData = await response.json();
       setPosts(resData.posts);
     }
@@ -21,31 +45,30 @@ function App() {
   }, []);
 
   function addPostHandler(postData) {
-    fetch('http://localhost:8080/posts', {
-      method: 'POST',
+    fetch("http://localhost:8080/posts", {
+      method: "POST",
       body: JSON.stringify(postData),
       headers: {
-        'Content-Type': 'application/json'
-      }
+        "Content-Type": "application/json",
+      },
     })
-    .then(response => response.json())
-    .then(data => {
-      setPosts((existingPosts) => [data.post, ...existingPosts]);
-    })
-    .catch(error => {
-      console.error('Error adding post:', error);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        setPosts((existingPosts) => [data.post, ...existingPosts]);
+      })
+      .catch((error) => {
+        console.error("Error adding post:", error);
+      });
   }
-  
 
-  function submitHandler(event){
+  function submitHandler(event) {
     event.preventDefault();
     const postData = {
       body: enteredBody,
-      author: enteredAuthor
+      author: enteredAuthor,
     };
     addPostHandler(postData);
-    }
+  }
 
   function changeBodyHandler(event) {
     setEnteredBody(event.target.value);
@@ -57,41 +80,68 @@ function App() {
 
   const deletePostHandler = async (id) => {
     if (!id) {
-      console.error('Post ID is undefined');
+      console.error("Post ID is undefined");
       return;
     }
-  
+
     try {
       const response = await fetch(`http://localhost:8080/posts/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
-  
+
       if (response.ok) {
-        setPosts((prevPosts) => prevPosts.filter(post => post._id !== id));
+        setPosts((prevPosts) => prevPosts.filter((post) => post._id !== id));
       } else {
-        console.error('Failed to delete post');
+        console.error("Failed to delete post");
       }
     } catch (error) {
-      console.error('Error deleting post:', error);
+      console.error("Error deleting post:", error);
     }
   };
-  
 
-  
   return (
     <main>
-      <NavScrollExample></NavScrollExample>
-      <div className="container mt-4">
-        <div className="row d-flex justify-content-center">
-          <NewPost
-            onBodyChange={changeBodyHandler}
-            onAuthorChange={changeAuthorHandler}
-            onEventChange={submitHandler}
-          ></NewPost>
-          <PostsList postsArray={posts} handleDelete={deletePostHandler}>
-          </PostsList>
-        </div>
-      </div>
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            isAuthenticated ? (
+              <Navigate to="/" />
+            ) : (
+              <Login onLogin={handleLogin} />
+            )
+          }
+        />
+        <Route
+          path="/register"
+          element={isAuthenticated ? <Navigate to="/" /> : <Register />}
+        />
+        <Route
+          path="/"
+          element={
+            isAuthenticated ? (
+              <div>
+                <NavScrollExample></NavScrollExample>
+                <div className="container mt-4">
+                  <div className="row d-flex justify-content-center">
+                    <NewPost
+                      onBodyChange={changeBodyHandler}
+                      onAuthorChange={changeAuthorHandler}
+                      onEventChange={submitHandler}
+                    ></NewPost>
+                    <PostsList
+                      postsArray={posts}
+                      handleDelete={deletePostHandler}
+                    ></PostsList>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+      </Routes>
     </main>
   );
 }

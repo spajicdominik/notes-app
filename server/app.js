@@ -1,8 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 const app = express();
+
+const JWT_SECRET = 'your_jwt_secret';
 
 app.use(bodyParser.json());
 
@@ -21,12 +25,48 @@ mongoose.connect('mongodb+srv://dominikspajic7:Dombajecar123@cluster0.wf1ecca.mo
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Error connecting to MongoDB:', err));
 
-const postSchema = new mongoose.Schema({
-  body: { type: String, required: true },
-  author: { type: String, required: true },
+const User = require('./models/user');
+const Post = require('./models/post');
+
+//------------//
+//AUTHENTICATION//
+
+app.post('/register', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    let user = await User.findOne({ username });
+    if (user) {
+      return res.status(400).json({ message: 'Username already exists' });
+    }
+    user = new User({ username, password });
+    await user.save();
+    res.status(201).json({ message: 'User created successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
-const Post = mongoose.model('Post', postSchema);
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+    const token = jwt.sign({ id: user._id, username: user.username }, JWT_SECRET, {
+      expiresIn: '1h',
+    });
+    res.json({ token });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+//-----------//
 
 app.get('/posts', async (req, res) => {
   try {
