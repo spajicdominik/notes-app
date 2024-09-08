@@ -1,0 +1,14 @@
+.postContainer {
+    display: flex;
+    align-items: center;  /* Align the post and icon in the same row */
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  
+  .trashIcon {
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;  /* Adds space between the post and the icon */
+  }
+  
