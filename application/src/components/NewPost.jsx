@@ -8,11 +8,11 @@ function NewPost({onAuthorChange, onBodyChange, onEventChange}) {
     <div className="col-md-6 col-12">
       <form className={classes.form} onSubmit={onEventChange}>
         <p>
-          <label htmlFor="body">Text</label>
+          <label htmlFor="body">Content</label>
           <textarea id="body" required rows={3} onChange={onBodyChange} />
         </p>
         <p>
-          <label htmlFor="name">Your name</label>
+          <label htmlFor="name">Title</label>
           <input
             type="text"
             id="name"

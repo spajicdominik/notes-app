@@ -25,11 +25,18 @@ function App() {
       method: 'POST',
       body: JSON.stringify(postData),
       headers: {
-        'Content-Type' : 'application/json'
+        'Content-Type': 'application/json'
       }
+    })
+    .then(response => response.json())
+    .then(data => {
+      setPosts((existingPosts) => [data.post, ...existingPosts]);
+    })
+    .catch(error => {
+      console.error('Error adding post:', error);
     });
-    setPosts((existingPosts) => [postData, ...existingPosts]);
   }
+  
 
   function submitHandler(event){
     event.preventDefault();
@@ -48,6 +55,28 @@ function App() {
     setEnteredAuthor(event.target.value);
   }
 
+  const deletePostHandler = async (id) => {
+    if (!id) {
+      console.error('Post ID is undefined');
+      return;
+    }
+  
+    try {
+      const response = await fetch(`http://localhost:8080/posts/${id}`, {
+        method: 'DELETE',
+      });
+  
+      if (response.ok) {
+        setPosts((prevPosts) => prevPosts.filter(post => post._id !== id));
+      } else {
+        console.error('Failed to delete post');
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
+  
+
   
   return (
     <main>
@@ -59,7 +88,7 @@ function App() {
             onAuthorChange={changeAuthorHandler}
             onEventChange={submitHandler}
           ></NewPost>
-          <PostsList postsArray={posts}>
+          <PostsList postsArray={posts} handleDelete={deletePostHandler}>
           </PostsList>
         </div>
       </div>

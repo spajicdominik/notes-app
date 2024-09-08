@@ -8,10 +8,11 @@ app.use(bodyParser.json());
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, PATCH, OPTIONS'); 
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   next();
 });
+
 
 mongoose.connect('mongodb+srv://dominikspajic7:Dombajecar123@cluster0.wf1ecca.mongodb.net/postsDB', {
   useNewUrlParser: true,
@@ -62,6 +63,17 @@ app.post('/posts', async (req, res) => {
     res.status(500).json({ message: 'Error saving post.' });
   }
 });
+
+app.delete('/posts/:id', async (req, res) => {
+  try {
+    const postId = req.params.id;
+    await Post.findByIdAndDelete(postId); 
+    res.status(200).json({ message: 'Post deleted successfully.' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting post.' });
+  }
+});
+
 
 app.listen(8080, () => {
   console.log('Server is running on http://localhost:8080');
