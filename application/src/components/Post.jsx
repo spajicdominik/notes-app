@@ -1,7 +1,7 @@
 import classes from "./Post.module.css";
+import { BsFillTrashFill } from "react-icons/bs";
 
 function Post({author, body}) {
-  const chosenName = "Dominik";
   return (
     <div className="col">
       <div className={classes.post}>
