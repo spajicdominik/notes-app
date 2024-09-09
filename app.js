@@ -158,7 +158,7 @@ io.on('connection', (socket) => {
 });
 
 
-
-server.listen(8080, () => {
+const PORT = process.env.PORT || 8080;
+server.listen(PORT, () => {
   console.log("HTTP/Socket.IO Server is running on http://localhost:8080");
 });
