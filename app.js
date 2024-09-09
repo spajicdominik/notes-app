@@ -162,7 +162,7 @@ io.on('connection', (socket) => {
 app.use(express.static(path.join(__dirname, 'application/dist')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'application/dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'application', 'dist', 'index.html'));
 });
 
 const PORT = process.env.PORT || 8080;
