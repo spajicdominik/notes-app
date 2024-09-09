@@ -5,9 +5,17 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { MdPostAdd, MdMessage } from 'react-icons/md';
+import { useState } from 'react';
 
 
-function NavScrollExample() {
+function NavScrollExample({ onLogout, onSearch }) {
+  const [searchInput, setSearchInput] = useState("");
+
+  const handleInputChange = (e) => {
+    setSearchInput(e.target.value);
+    onSearch(e.target.value); 
+  };
+
   return (
     <Navbar bg="primary" expand="md" className="bg-primary mx-5 ps-2 py-3 shadow-lg" >
       <Container fluid>
@@ -21,15 +29,11 @@ function NavScrollExample() {
             navbarScroll
           >
             <Nav.Link href="#action1">Home</Nav.Link>
-            <Nav.Link href="#action2">Link</Nav.Link>
+            <Nav.Link href="#action2" onClick={onLogout}>Log out</Nav.Link>
             <NavDropdown title="Link" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
+              <NavDropdown.Item href="#action3">About</NavDropdown.Item>
               <NavDropdown.Item href="#action4">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
-                Something else here
+                Download all tasks
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
@@ -39,6 +43,8 @@ function NavScrollExample() {
               placeholder="Search"
               className="me-2"
               aria-label="Search"
+              value={searchInput}
+              onChange={handleInputChange}
             />
             <Button variant="primary">Search</Button>
           </Form>

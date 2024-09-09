@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Login({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate(); 
+
+  const handleGoToRegister = () => {
+    navigate('/register');
+  };
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -17,7 +24,7 @@ function Login({ onLogin }) {
     const data = await response.json();
 
     if (response.ok) {
-      onLogin(data.token);  // Pass the token to the parent component
+      onLogin(data.token); 
     } else {
       setError(data.message);
     }
@@ -42,6 +49,9 @@ function Login({ onLogin }) {
         />
         <button type="submit">Login</button>
       </form>
+
+      <p>Haven't registered yet?</p>
+      <button onClick={handleGoToRegister}>Click here!</button>
     </div>
   );
 }

@@ -14,7 +14,17 @@ function App() {
   const [enteredAuthor, setEnteredAuthor] = useState("");
   const [posts, setPosts] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(""); 
   const navigate = useNavigate();
+
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+  };
+
+  const filteredPosts = posts.filter(post =>
+    post.body.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    post.author.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -121,7 +131,7 @@ function App() {
           element={
             isAuthenticated ? (
               <div>
-                <NavScrollExample></NavScrollExample>
+                <NavScrollExample onLogout={handleLogout} isAuthenticated={isAuthenticated} onSearch={handleSearch}></NavScrollExample>
                 <div className="container mt-4">
                   <div className="row d-flex justify-content-center">
                     <NewPost
@@ -130,7 +140,7 @@ function App() {
                       onEventChange={submitHandler}
                     ></NewPost>
                     <PostsList
-                      postsArray={posts}
+                      postsArray={filteredPosts}
                       handleDelete={deletePostHandler}
                     ></PostsList>
                   </div>

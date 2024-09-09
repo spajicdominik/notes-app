@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const navigate = useNavigate(); 
+
+  const handleGoToLogin = () => {
+    navigate('/login');
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -44,6 +50,8 @@ function Register() {
         />
         <button type="submit">Register</button>
       </form>
+      <p>Already have an account?</p>
+      <button onClick={handleGoToLogin}>Click here!</button>
     </div>
   );
 }
