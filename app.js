@@ -12,10 +12,11 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", 
+    origin: "*", 
     methods: ["GET", "POST"], 
     credentials: true, 
   },
+  transports: ['websocket', 'polling']
 });
  
 const JWT_SECRET = "your_jwt_secret";
@@ -139,6 +140,8 @@ app.delete("/posts/:id", async (req, res) => {
   }
 });
 
+//morning-journey-89141
+
 //------------//
 //TCP REAL TIME//
 
@@ -162,6 +165,8 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'application/dist', 'index.html'));
 });
 
-server.listen(8080, () => {
-  console.log("HTTP/Socket.IO Server is running on http://localhost:8080");
+const PORT = process.env.PORT || 8080;
+
+server.listen(PORT, () => {
+  console.log(`HTTP/Socket.IO Server is running on port ${PORT}`);
 });
