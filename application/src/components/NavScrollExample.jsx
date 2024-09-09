@@ -8,7 +8,7 @@ import { MdPostAdd, MdMessage } from 'react-icons/md';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function NavScrollExample({ onLogout, onSearch, onDownload }) {
+function NavScrollExample({ onLogout, onSearch, onDownload, onTCP }) {
   const [searchInput, setSearchInput] = useState("");
   const navigate = useNavigate(); 
 
@@ -43,6 +43,9 @@ function NavScrollExample({ onLogout, onSearch, onDownload }) {
               <NavDropdown.Item href="#action3" onClick={goToAbout}>About the developer</NavDropdown.Item>
               <NavDropdown.Item href="#action4" onClick={onDownload}>
                 Download all tasks (JSON)
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action4" onClick={onTCP}>
+                Check TCP communication
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>

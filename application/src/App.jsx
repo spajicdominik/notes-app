@@ -9,6 +9,8 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import About from "./components/About"
+import { io } from "socket.io-client"; 
+import Button from "react-bootstrap/esm/Button";
 
 function App() {
   const [enteredBody, setEnteredBody] = useState("");
@@ -17,8 +19,30 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [searchTerm, setSearchTerm] = useState(""); 
   const navigate = useNavigate();
+  const [socket, setSocket] = useState(null);
 
-  
+  useEffect(() => {
+    const socketIo = io("http://localhost:8080");
+    setSocket(socketIo);
+
+    socketIo.on("connect", () => {
+      console.log("Connected to the TCP server via Socket.IO");
+    });
+
+    socketIo.on("message", (data) => {
+      console.log("Message from TCP server:", data);
+    });
+
+    return () => {
+      socketIo.disconnect();
+    };
+  }, []);
+
+  const sendMessageToServer = () => {
+    if (socket) {
+      socket.emit("message", "Hello from client!"); 
+    }
+  };
 
   const handleDownloadPosts = async () => {
     try {
@@ -172,7 +196,8 @@ function App() {
                 <NavScrollExample onLogout={handleLogout} 
                 isAuthenticated={isAuthenticated} 
                 onSearch={handleSearch}
-                onDownload={handleDownloadPosts}></NavScrollExample>
+                onDownload={handleDownloadPosts}
+                onTCP={sendMessageToServer}></NavScrollExample>
                 <div className="container mt-4">
                   <div className="row d-flex justify-content-center">
                     <NewPost
