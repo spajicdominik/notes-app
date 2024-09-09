@@ -9,15 +9,16 @@ const { Server } = require('socket.io');;
 const app = express();
 const server = http.createServer(app);
 
+const mongoUri = process.env.MONGO_URI;
+const jwtSecret = process.env.JWT_SECRET;
+
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", 
+    origin: "https://notes-app-frontend-bay.vercel.app/", 
     methods: ["GET", "POST"], 
     credentials: true, 
   },
 });
- 
-const JWT_SECRET = "your_jwt_secret";
 
 app.use(bodyParser.json());
 
@@ -33,7 +34,7 @@ app.use((req, res, next) => {
 
 mongoose
   .connect(
-    "mongodb+srv://dominikspajic7:Dombajecar123@cluster0.wf1ecca.mongodb.net/postsDB",
+    mongoUri,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -76,7 +77,7 @@ app.post("/login", async (req, res) => {
     }
     const token = jwt.sign(
       { id: user._id, username: user.username },
-      JWT_SECRET,
+      jwtSecret,
       {
         expiresIn: "1h",
       }
