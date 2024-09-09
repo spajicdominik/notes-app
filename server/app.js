@@ -14,7 +14,7 @@ const jwtSecret = process.env.JWT_SECRET;
 
 const io = new Server(server, {
   cors: {
-    origin: "https://notes-app-frontend-bay.vercel.app/", 
+    origin: "https://notes-app-frontend-bay.vercel.app", 
     methods: ["GET", "POST"], 
     credentials: true, 
   },
