@@ -25,6 +25,9 @@ function About() {
 
   return (
     <div>
+        <div className="container">
+            <h1 className="mt-5 mb-5">O developeru</h1>
+        </div>
       <div className="container mt-5 mb-3">
         <div className="row">
           <div className="col-md-6 col-12 mb-4">
