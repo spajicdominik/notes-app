@@ -8,7 +8,7 @@ import { MdPostAdd, MdMessage } from 'react-icons/md';
 import { useState } from 'react';
 
 
-function NavScrollExample({ onLogout, onSearch }) {
+function NavScrollExample({ onLogout, onSearch, onDownload }) {
   const [searchInput, setSearchInput] = useState("");
 
   const handleInputChange = (e) => {
@@ -32,8 +32,8 @@ function NavScrollExample({ onLogout, onSearch }) {
             <Nav.Link href="#action2" onClick={onLogout}>Log out</Nav.Link>
             <NavDropdown title="Link" id="navbarScrollingDropdown">
               <NavDropdown.Item href="#action3">About</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
-                Download all tasks
+              <NavDropdown.Item href="#action4" onClick={onDownload}>
+                Download all tasks (JSON)
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>

@@ -17,6 +17,24 @@ function App() {
   const [searchTerm, setSearchTerm] = useState(""); 
   const navigate = useNavigate();
 
+  const handleDownloadPosts = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/posts');
+      const posts = await response.json();
+
+      const jsonData = JSON.stringify(posts.posts, null, 2); 
+      
+      const blob = new Blob([jsonData], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'tasks.json';
+      link.click();
+    } catch (error) {
+      console.error('Error downloading tasks:', error);
+    }
+  };
+
+
   const handleSearch = (term) => {
     setSearchTerm(term);
   };
@@ -131,7 +149,10 @@ function App() {
           element={
             isAuthenticated ? (
               <div>
-                <NavScrollExample onLogout={handleLogout} isAuthenticated={isAuthenticated} onSearch={handleSearch}></NavScrollExample>
+                <NavScrollExample onLogout={handleLogout} 
+                isAuthenticated={isAuthenticated} 
+                onSearch={handleSearch}
+                onDownload={handleDownloadPosts}></NavScrollExample>
                 <div className="container mt-4">
                   <div className="row d-flex justify-content-center">
                     <NewPost
