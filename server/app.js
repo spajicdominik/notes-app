@@ -31,9 +31,11 @@ app.use((req, res, next) => {
   next();
 });
 
+const mongoURI = process.env.MONGODB_URI || "your-local-mongodb-uri";
+
 mongoose
   .connect(
-    "mongodb+srv://dominikspajic7:Dombajecar123@cluster0.wf1ecca.mongodb.net/postsDB",
+    mongoURI,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
