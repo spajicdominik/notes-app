@@ -8,6 +8,7 @@ import NavScrollExample from "./components/NavScrollExample";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
+import About from "./components/About"
 
 function App() {
   const [enteredBody, setEnteredBody] = useState("");
@@ -16,6 +17,8 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [searchTerm, setSearchTerm] = useState(""); 
   const navigate = useNavigate();
+
+  
 
   const handleDownloadPosts = async () => {
     try {
@@ -130,6 +133,23 @@ function App() {
   return (
     <main>
       <Routes>
+        <Route
+        path="/about"
+        element={
+          isAuthenticated ? (
+            <div className="container">
+              <NavScrollExample onLogout={handleLogout} 
+                isAuthenticated={isAuthenticated} 
+                onSearch={handleSearch}
+                onDownload={handleDownloadPosts}></NavScrollExample>
+            <About></About>
+            </div>
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+        />
+
         <Route
           path="/login"
           element={

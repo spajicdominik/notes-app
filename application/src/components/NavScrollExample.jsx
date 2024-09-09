@@ -6,10 +6,19 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { MdPostAdd, MdMessage } from 'react-icons/md';
 import { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 
 function NavScrollExample({ onLogout, onSearch, onDownload }) {
   const [searchInput, setSearchInput] = useState("");
+  const navigate = useNavigate(); 
+
+  const goToAbout = () => {
+    navigate('/about');
+  };
+
+  const goToHome = () => {
+    navigate('/');
+  };
 
   const handleInputChange = (e) => {
     setSearchInput(e.target.value);
@@ -28,10 +37,10 @@ function NavScrollExample({ onLogout, onSearch, onDownload }) {
             style={{ maxHeight: '100px' }}
             navbarScroll
           >
-            <Nav.Link href="#action1">Home</Nav.Link>
+            <Nav.Link href="#action1" onClick={goToHome}>Home</Nav.Link>
             <Nav.Link href="#action2" onClick={onLogout}>Log out</Nav.Link>
             <NavDropdown title="Link" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">About</NavDropdown.Item>
+              <NavDropdown.Item href="#action3" onClick={goToAbout}>About the developer</NavDropdown.Item>
               <NavDropdown.Item href="#action4" onClick={onDownload}>
                 Download all tasks (JSON)
               </NavDropdown.Item>
