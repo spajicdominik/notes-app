@@ -22,7 +22,9 @@ function App() {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const socketIo = io("http://localhost:8080");
+    const socketIo = io("http://localhost:8080", {
+      transports: ["websocket", "polling"],
+    });
     setSocket(socketIo);
 
     socketIo.on("connect", () => {

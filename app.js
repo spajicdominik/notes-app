@@ -6,14 +6,16 @@ const bcrypt = require("bcryptjs");
 const http = require('http');
 const { Server } = require('socket.io');;
 const path = require('path');
+const cors = require('cors')
 
 const app = express();
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "*", 
-    methods: ["GET", "POST"], 
+    origin: "http://localhost:8080", 
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true, 
   },
   transports: ['websocket', 'polling']
@@ -23,15 +25,23 @@ const JWT_SECRET = "your_jwt_secret";
 
 app.use(bodyParser.json());
 
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, DELETE, PUT, PATCH, OPTIONS"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  next();
-});
+app.use(cors({
+  origin: "http://localhost:8080",
+  methods: ["GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
+
+
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "*");
+//   res.setHeader(
+//     "Access-Control-Allow-Methods",
+//     "GET, POST, DELETE, PUT, PATCH, OPTIONS"
+//   );
+//   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+//   next();
+// });
 
 mongoose
   .connect(
