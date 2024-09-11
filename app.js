@@ -13,7 +13,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:8080", 
+    origin: ["http://localhost:8080", "https://morning-journey-89141-6f1099ac392f.herokuapp.com"], 
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true, 
@@ -26,7 +26,7 @@ const JWT_SECRET = "your_jwt_secret";
 app.use(bodyParser.json());
 
 app.use(cors({
-  origin: "http://localhost:8080",
+  origin: ["http://localhost:8080", "https://morning-journey-89141-6f1099ac392f.herokuapp.com"],
   methods: ["GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
