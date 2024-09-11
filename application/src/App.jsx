@@ -22,7 +22,7 @@ function App() {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const socketIo = io("http://localhost:8080", {
+    const socketIo = io("https://morning-journey-89141-6f1099ac392f.herokuapp.com", {
       transports: ["websocket", "polling"],
     });
     setSocket(socketIo);
@@ -48,7 +48,7 @@ function App() {
 
   const handleDownloadPosts = async () => {
     try {
-      const response = await fetch('http://localhost:8080/posts');
+      const response = await fetch('https://morning-journey-89141-6f1099ac392f.herokuapp.com/posts');
       const posts = await response.json();
 
       const jsonData = JSON.stringify(posts.posts, null, 2); 
@@ -94,7 +94,7 @@ function App() {
 
   useEffect(() => {
     async function fetchPosts() {
-      const response = await fetch("http://localhost:8080/posts");
+      const response = await fetch("https://morning-journey-89141-6f1099ac392f.herokuapp.com/posts");
       const resData = await response.json();
       setPosts(resData.posts);
     }
@@ -102,7 +102,7 @@ function App() {
   }, []);
 
   function addPostHandler(postData) {
-    fetch("http://localhost:8080/posts", {
+    fetch("https://morning-journey-89141-6f1099ac392f.herokuapp.com/posts", {
       method: "POST",
       body: JSON.stringify(postData),
       headers: {
@@ -142,7 +142,7 @@ function App() {
     }
 
     try {
-      const response = await fetch(`http://localhost:8080/posts/${id}`, {
+      const response = await fetch(`https://morning-journey-89141-6f1099ac392f.herokuapp.com/posts/${id}`, {
         method: "DELETE",
       });
 
