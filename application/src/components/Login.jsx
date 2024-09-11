@@ -15,7 +15,7 @@ function Login({ onLogin }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     
-    const response = await fetch('http://localhost:8080/login', {
+    const response = await fetch('https://morning-journey-89141-6f1099ac392f.herokuapp.com/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
