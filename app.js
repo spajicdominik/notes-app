@@ -11,6 +11,13 @@ const cors = require('cors')
 const app = express();
 const server = http.createServer(app);
 
+app.use(cors({
+  origin: ["http://localhost:8080", "https://morning-journey-89141-6f1099ac392f.herokuapp.com"],
+  methods: ["GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
+
 const io = new Server(server, {
   cors: {
     origin: ["http://localhost:8080", "https://morning-journey-89141-6f1099ac392f.herokuapp.com"], 
@@ -24,14 +31,6 @@ const io = new Server(server, {
 const JWT_SECRET = "your_jwt_secret";
 
 app.use(bodyParser.json());
-
-app.use(cors({
-  origin: ["http://localhost:8080", "https://morning-journey-89141-6f1099ac392f.herokuapp.com"],
-  methods: ["GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
-}));
-
 
 // app.use((req, res, next) => {
 //   res.setHeader("Access-Control-Allow-Origin", "*");
