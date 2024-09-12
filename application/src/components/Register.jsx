@@ -15,7 +15,7 @@ function Register() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const response = await fetch('http://localhost:8080/register', {
+    const response = await fetch('https://morning-journey-89141-6f1099ac392f.herokuapp.com/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
